@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Random CV Generator</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #f7f8fa;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .cv {
+      background: white;
+      padding: 25px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    h1 {
+      font-size: 24px;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+    h2 {
+      font-size: 18px;
+      color: #16a085;
+      margin: 10px 0 5px;
+    }
+    p {
+      margin: 5px 0;
+    }
+    .button {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+      transition: 0.3s;
+    }
+    .button:hover {
+      background: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <h1>Random CV Generator</h1>
+  <button class="button" onclick="generateCV()">Generate Random CV</button>
+  <div class="cv" id="cvContainer">
+    <p>Click the button to generate a random CV.</p>
+  </div>
+
+  <script>
+    const names = ["Alex Johnson", "Maria Gomez", "Ethan Lee", "Sofia Rossi", "David Chen", "Lara Ahmed", "Tom Müller"];
+    const titles = ["Software Engineer", "Graphic Designer", "Marketing Specialist", "Data Analyst", "Product Manager", "UX/UI Designer"];
+    const skills = [
+      ["JavaScript", "HTML", "CSS", "React", "Node.js"],
+      ["Photoshop", "Illustrator", "Figma", "InDesign"],
+      ["SEO", "Google Analytics", "Copywriting", "Social Media Marketing"],
+      ["Python", "SQL", "Excel", "Tableau"],
+      ["Leadership", "Agile", "Roadmapping", "User Research"],
+      ["Wireframing", "Prototyping", "User Testing", "Accessibility"]
+    ];
+    const experiences = [
+      "Worked at TechCorp developing responsive web applications.",
+      "Designed marketing materials and managed branding for local startups.",
+      "Analyzed data to identify trends and improve business strategies.",
+      "Led a product team to successfully launch an e-commerce platform.",
+      "Improved UX flows and reduced bounce rate by 30%.",
+    ];
+    const educations = [
+      "B.Sc. in Computer Science - University of London",
+      "B.A. in Design - Rhode Island School of Design",
+      "MBA - Stanford University",
+      "B.Sc. in Data Science - MIT",
+      "B.A. in Marketing - New York University"
+    ];
+
+    function randomItem(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function generateCV() {
+      const name = randomItem(names);
+      const title = randomItem(titles);
+      const skillSet = randomItem(skills);
+      const experience = randomItem(experiences);
+      const education = randomItem(educations);
+      const email = name.toLowerCase().replace(" ", ".") + "@example.com";
+
+      const cvHTML = `
+        <h1>${name}</h1>
+        <p><strong>${title}</strong></p>
+        <p>Email: ${email}</p>
+        <hr>
+        <h2>Education</h2>
+        <p>${education}</p>
+        <h2>Experience</h2>
+        <p>${experience}</p>
+        <h2>Skills</h2>
+        <p>${skillSet.join(", ")}</p>
+      `;
+      document.getElementById("cvContainer").innerHTML = cvHTML;
+    }
+  </script>
+</body>
+</html>

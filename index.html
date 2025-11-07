@@ -1,118 +1,499 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Random CV Generator</title>
-  <style>
-    body {
-      font-family: "Segoe UI", sans-serif;
-      background: #f7f8fa;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: start;
-      min-height: 100vh;
-      padding: 20px;
-    }
-    .cv {
-      background: white;
-      padding: 25px;
-      max-width: 600px;
-      width: 100%;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-      border-radius: 10px;
-      margin-top: 20px;
-    }
-    h1 {
-      font-size: 24px;
-      color: #2c3e50;
-      margin-bottom: 5px;
-    }
-    h2 {
-      font-size: 18px;
-      color: #16a085;
-      margin: 10px 0 5px;
-    }
-    p {
-      margin: 5px 0;
-    }
-    .button {
-      background: #3498db;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 20px;
-      transition: 0.3s;
-    }
-    .button:hover {
-      background: #2980b9;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random CV Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        main {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .summary {
+            font-size: 1.1rem;
+            text-align: justify;
+        }
+
+        .experience-item, .education-item {
+            margin-bottom: 20px;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .item-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+
+        .item-date {
+            color: #7f8c8d;
+        }
+
+        .item-subtitle {
+            color: #3498db;
+            margin-bottom: 8px;
+        }
+
+        .item-description {
+            text-align: justify;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill {
+            background-color: #eaf2f8;
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: #2c3e50;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        button {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        @media print {
+            .controls {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .item-header {
+                flex-direction: column;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Random CV Generator</h1>
-  <button class="button" onclick="generateCV()">Generate Random CV</button>
-  <div class="cv" id="cvContainer">
-    <p>Click the button to generate a random CV.</p>
-  </div>
+    <div class="controls">
+        <button id="generateBtn">Generate Random CV</button>
+        <button id="printBtn">Print CV</button>
+    </div>
 
-  <script>
-    const names = ["Alex Johnson", "Maria Gomez", "Ethan Lee", "Sofia Rossi", "David Chen", "Lara Ahmed", "Tom Müller"];
-    const titles = ["Software Engineer", "Graphic Designer", "Marketing Specialist", "Data Analyst", "Product Manager", "UX/UI Designer"];
-    const skills = [
-      ["JavaScript", "HTML", "CSS", "React", "Node.js"],
-      ["Photoshop", "Illustrator", "Figma", "InDesign"],
-      ["SEO", "Google Analytics", "Copywriting", "Social Media Marketing"],
-      ["Python", "SQL", "Excel", "Tableau"],
-      ["Leadership", "Agile", "Roadmapping", "User Research"],
-      ["Wireframing", "Prototyping", "User Testing", "Accessibility"]
-    ];
-    const experiences = [
-      "Worked at TechCorp developing responsive web applications.",
-      "Designed marketing materials and managed branding for local startups.",
-      "Analyzed data to identify trends and improve business strategies.",
-      "Led a product team to successfully launch an e-commerce platform.",
-      "Improved UX flows and reduced bounce rate by 30%.",
-    ];
-    const educations = [
-      "B.Sc. in Computer Science - University of London",
-      "B.A. in Design - Rhode Island School of Design",
-      "MBA - Stanford University",
-      "B.Sc. in Data Science - MIT",
-      "B.A. in Marketing - New York University"
-    ];
+    <div class="container" id="cvContainer">
+        <header>
+            <h1 id="fullName">John Doe</h1>
+            <p class="subtitle" id="jobTitle">Frontend Developer</p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span>📧</span>
+                    <span id="email">john.doe@example.com</span>
+                </div>
+                <div class="contact-item">
+                    <span>📱</span>
+                    <span id="phone">+1 (555) 123-4567</span>
+                </div>
+                <div class="contact-item">
+                    <span>📍</span>
+                    <span id="location">New York, NY</span>
+                </div>
+            </div>
+        </header>
 
-    function randomItem(arr) {
-      return arr[Math.floor(Math.random() * arr.length)];
-    }
+        <main>
+            <section class="section">
+                <h2 class="section-title">Professional Summary</h2>
+                <p class="summary" id="summary">
+                    Experienced developer with 5+ years in web application development. 
+                    Strong problem-solving skills and a passion for creating efficient, 
+                    user-friendly solutions.
+                </p>
+            </section>
 
-    function generateCV() {
-      const name = randomItem(names);
-      const title = randomItem(titles);
-      const skillSet = randomItem(skills);
-      const experience = randomItem(experiences);
-      const education = randomItem(educations);
-      const email = name.toLowerCase().replace(" ", ".") + "@example.com";
+            <section class="section">
+                <h2 class="section-title">Work Experience</h2>
+                <div id="experience">
+                    <div class="experience-item">
+                        <div class="item-header">
+                            <div class="item-title">Senior Developer</div>
+                            <div class="item-date">2020 - Present</div>
+                        </div>
+                        <div class="item-subtitle">Tech Solutions Inc.</div>
+                        <p class="item-description">
+                            Led a team of 5 developers in creating enterprise-level applications. 
+                            Implemented agile methodologies to improve project delivery times by 20%.
+                        </p>
+                    </div>
+                    <div class="experience-item">
+                        <div class="item-header">
+                            <div class="item-title">Web Developer</div>
+                            <div class="item-date">2017 - 2020</div>
+                        </div>
+                        <div class="item-subtitle">Digital Creations LLC</div>
+                        <p class="item-description">
+                            Developed responsive websites for clients across various industries. 
+                            Collaborated with designers to implement pixel-perfect UI designs.
+                        </p>
+                    </div>
+                </div>
+            </section>
 
-      const cvHTML = `
-        <h1>${name}</h1>
-        <p><strong>${title}</strong></p>
-        <p>Email: ${email}</p>
-        <hr>
-        <h2>Education</h2>
-        <p>${education}</p>
-        <h2>Experience</h2>
-        <p>${experience}</p>
-        <h2>Skills</h2>
-        <p>${skillSet.join(", ")}</p>
-      `;
-      document.getElementById("cvContainer").innerHTML = cvHTML;
-    }
-  </script>
+            <section class="section">
+                <h2 class="section-title">Education</h2>
+                <div id="education">
+                    <div class="education-item">
+                        <div class="item-header">
+                            <div class="item-title">Bachelor of Science in Computer Science</div>
+                            <div class="item-date">2013 - 2017</div>
+                        </div>
+                        <div class="item-subtitle">University of Technology</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Skills</h2>
+                <div class="skills-list" id="skills">
+                    <div class="skill">JavaScript</div>
+                    <div class="skill">React</div>
+                    <div class="skill">HTML/CSS</div>
+                    <div class="skill">Node.js</div>
+                    <div class="skill">Git</div>
+                    <div class="skill">Agile Methodologies</div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Generated with Random CV Generator</p>
+        </footer>
+    </div>
+
+    <script>
+        // Data pools for generating random CVs
+        const firstNames = [
+            'James', 'Mary', 'John', 'Patricia', 'Robert', 'Jennifer', 
+            'Michael', 'Linda', 'William', 'Elizabeth', 'David', 'Barbara',
+            'Richard', 'Susan', 'Joseph', 'Jessica', 'Thomas', 'Sarah',
+            'Charles', 'Karen', 'Christopher', 'Nancy', 'Daniel', 'Lisa'
+        ];
+
+        const lastNames = [
+            'Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia',
+            'Miller', 'Davis', 'Rodriguez', 'Martinez', 'Hernandez', 'Lopez',
+            'Gonzalez', 'Wilson', 'Anderson', 'Thomas', 'Taylor', 'Moore',
+            'Jackson', 'Martin', 'Lee', 'Perez', 'Thompson', 'White'
+        ];
+
+        const jobTitles = [
+            'Frontend Developer', 'Backend Developer', 'Full Stack Developer',
+            'Software Engineer', 'Web Developer', 'UX/UI Designer',
+            'Data Scientist', 'DevOps Engineer', 'Mobile App Developer',
+            'Project Manager', 'Product Manager', 'System Administrator'
+        ];
+
+        const companies = [
+            'Tech Solutions Inc.', 'Digital Creations LLC', 'Innovate Labs',
+            'Global Systems Corp', 'Future Tech Enterprises', 'Web Works Co.',
+            'Data Dynamics', 'Cloud Systems Ltd', 'Code Masters Inc.',
+            'Digital Innovations', 'Tech Pioneers', 'Software Solutions'
+        ];
+
+        const cities = [
+            'New York, NY', 'San Francisco, CA', 'Austin, TX', 'Seattle, WA',
+            'Boston, MA', 'Chicago, IL', 'Denver, CO', 'Los Angeles, CA',
+            'Portland, OR', 'Miami, FL', 'Atlanta, GA', 'Dallas, TX'
+        ];
+
+        const summaries = [
+            'Experienced developer with a passion for creating efficient, scalable solutions. Strong background in full-stack development and team leadership.',
+            'Creative problem-solver with expertise in modern web technologies. Dedicated to writing clean, maintainable code and delivering exceptional user experiences.',
+            'Results-driven professional with extensive experience in software development and project management. Skilled in agile methodologies and cross-functional team collaboration.',
+            'Innovative developer with a focus on user-centered design and cutting-edge technologies. Proven track record of delivering high-quality software solutions.',
+            'Detail-oriented engineer with expertise in both frontend and backend development. Committed to continuous learning and staying current with industry trends.'
+        ];
+
+        const skillsPool = [
+            'JavaScript', 'React', 'Angular', 'Vue.js', 'Node.js', 'Python',
+            'Java', 'C#', 'PHP', 'Ruby', 'HTML/CSS', 'Sass/Less',
+            'TypeScript', 'SQL', 'MongoDB', 'PostgreSQL', 'Git', 'Docker',
+            'AWS', 'Azure', 'Agile Methodologies', 'Scrum', 'REST APIs',
+            'GraphQL', 'CI/CD', 'Testing', 'UI/UX Design', 'Project Management'
+        ];
+
+        const responsibilities = [
+            'Led development of key features that improved user engagement by 30%',
+            'Collaborated with cross-functional teams to deliver projects on time and within budget',
+            'Implemented responsive designs that improved mobile user experience',
+            'Optimized application performance, reducing load times by 40%',
+            'Mentored junior developers and conducted code reviews',
+            'Developed and maintained RESTful APIs serving thousands of requests daily',
+            'Integrated third-party services and APIs to extend application functionality',
+            'Created comprehensive test suites that increased code coverage to over 90%'
+        ];
+
+        const universities = [
+            'University of Technology', 'State College', 'Tech Institute',
+            'Metropolitan University', 'Polytechnic University', 'Global University',
+            'Digital Arts College', 'Computer Science Academy', 'Engineering School'
+        ];
+
+        const degrees = [
+            'Bachelor of Science in Computer Science',
+            'Master of Science in Software Engineering',
+            'Bachelor of Arts in Design',
+            'Associate Degree in Web Development',
+            'Bachelor of Engineering in Computer Engineering',
+            'Master of Business Administration'
+        ];
+
+        // Utility functions
+        function getRandomItem(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        function getRandomItems(array, count) {
+            const shuffled = [...array].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        function getRandomDate(startYear, endYear) {
+            const start = new Date(startYear, 0, 1);
+            const end = new Date(endYear, 11, 31);
+            const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+            return date;
+        }
+
+        function formatDate(date) {
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+        }
+
+        function generateExperience() {
+            const experienceCount = Math.floor(Math.random() * 2) + 2; // 2-3 experiences
+            const experiences = [];
+            
+            let currentYear = new Date().getFullYear();
+            
+            for (let i = 0; i < experienceCount; i++) {
+                const startYear = currentYear - Math.floor(Math.random() * 5) - 3;
+                const endYear = startYear + Math.floor(Math.random() * 4) + 1;
+                
+                // Ensure end year is not in the future
+                const actualEndYear = Math.min(endYear, currentYear);
+                
+                experiences.push({
+                    title: getRandomItem(jobTitles),
+                    company: getRandomItem(companies),
+                    startDate: startYear,
+                    endDate: actualEndYear,
+                    description: getRandomItems(responsibilities, Math.floor(Math.random() * 2) + 2).join('. ') + '.'
+                });
+                
+                currentYear = startYear - 1;
+            }
+            
+            return experiences;
+        }
+
+        function generateEducation() {
+            const educationCount = Math.floor(Math.random() * 2) + 1; // 1-2 education entries
+            const educations = [];
+            
+            let currentYear = new Date().getFullYear();
+            
+            for (let i = 0; i < educationCount; i++) {
+                const startYear = currentYear - Math.floor(Math.random() * 6) - 4;
+                const endYear = startYear + Math.floor(Math.random() * 3) + 3;
+                
+                educations.push({
+                    degree: getRandomItem(degrees),
+                    school: getRandomItem(universities),
+                    startDate: startYear,
+                    endDate: endYear
+                });
+                
+                currentYear = startYear - 1;
+            }
+            
+            return educations;
+        }
+
+        function generateCV() {
+            // Generate personal details
+            const firstName = getRandomItem(firstNames);
+            const lastName = getRandomItem(lastNames);
+            const fullName = `${firstName} ${lastName}`;
+            const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`;
+            const phone = `+1 (${Math.floor(Math.random() * 900) + 100}) ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`;
+            const location = getRandomItem(cities);
+            const jobTitle = getRandomItem(jobTitles);
+            const summary = getRandomItem(summaries);
+            
+            // Update personal details in the CV
+            document.getElementById('fullName').textContent = fullName;
+            document.getElementById('jobTitle').textContent = jobTitle;
+            document.getElementById('email').textContent = email;
+            document.getElementById('phone').textContent = phone;
+            document.getElementById('location').textContent = location;
+            document.getElementById('summary').textContent = summary;
+            
+            // Generate and update experience
+            const experiences = generateExperience();
+            const experienceContainer = document.getElementById('experience');
+            experienceContainer.innerHTML = '';
+            
+            experiences.forEach(exp => {
+                const experienceItem = document.createElement('div');
+                experienceItem.className = 'experience-item';
+                
+                experienceItem.innerHTML = `
+                    <div class="item-header">
+                        <div class="item-title">${exp.title}</div>
+                        <div class="item-date">${exp.startDate} - ${exp.endDate}</div>
+                    </div>
+                    <div class="item-subtitle">${exp.company}</div>
+                    <p class="item-description">${exp.description}</p>
+                `;
+                
+                experienceContainer.appendChild(experienceItem);
+            });
+            
+            // Generate and update education
+            const educations = generateEducation();
+            const educationContainer = document.getElementById('education');
+            educationContainer.innerHTML = '';
+            
+            educations.forEach(edu => {
+                const educationItem = document.createElement('div');
+                educationItem.className = 'education-item';
+                
+                educationItem.innerHTML = `
+                    <div class="item-header">
+                        <div class="item-title">${edu.degree}</div>
+                        <div class="item-date">${edu.startDate} - ${edu.endDate}</div>
+                    </div>
+                    <div class="item-subtitle">${edu.school}</div>
+                `;
+                
+                educationContainer.appendChild(educationItem);
+            });
+            
+            // Generate and update skills
+            const skills = getRandomItems(skillsPool, Math.floor(Math.random() * 5) + 6); // 6-10 skills
+            const skillsContainer = document.getElementById('skills');
+            skillsContainer.innerHTML = '';
+            
+            skills.forEach(skill => {
+                const skillElement = document.createElement('div');
+                skillElement.className = 'skill';
+                skillElement.textContent = skill;
+                skillsContainer.appendChild(skillElement);
+            });
+        }
+
+        // Event listeners
+        document.getElementById('generateBtn').addEventListener('click', generateCV);
+        document.getElementById('printBtn').addEventListener('click', () => {
+            window.print();
+        });
+
+        // Generate initial CV
+        generateCV();
+    </script>
 </body>
 </html>
